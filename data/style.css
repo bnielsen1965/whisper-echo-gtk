@@ -1,0 +1,67 @@
+/* Status indicator colors */
+
+.status-idle {
+    color: #71717a;
+    font-size: 1em;
+}
+
+.status-listening {
+    color: #22c55e;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.status-capturing {
+    color: #eab308;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.status-processing {
+    color: #3b82f6;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+/* UInput icon indicator */
+.uinput-icon {
+    margin-right: 8px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.uinput-on {
+    color: #22c55e;
+}
+
+.uinput-pending {
+    color: #eab308;
+}
+
+.uinput-stopped {
+    color: #ef4444;
+}
+
+.uinput-off {
+    color: #71717a;
+}
+
+/* Settings warning */
+.warning {
+    color: #b45309;
+    font-weight: 600;
+    border: 1px solid #b45309;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+/* Make destructive stop button clearly active */
+button.destructive-action {
+    background-color: #ef4444;
+    color: white;
+}
+button.destructive-action:disabled {
+    background-color: #ef4444;
+    color: #ffffffaa;
+    opacity: 0.6;
+}
