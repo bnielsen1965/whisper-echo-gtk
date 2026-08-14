@@ -1,0 +1,17 @@
+Source: whisper-echo-gtk
+Section: multimedia
+Priority: optional
+Maintainer: Bryan Nielsen <bnielsen1965@gmail.com>
+Build-Depends: debhelper (>= 13), cmake (>= 3.16), build-essential, libgtk-4-dev, libadwaita-1-dev
+Standards-Version: 4.7.0
+Homepage: https://github.com/bnielsen1965/whisper-echo
+Vcs-Browser: https://github.com/bnielsen1965/whisper-echo
+Vcs-Git: https://github.com/bnielsen1965/whisper-echo-gtk.git
+
+Package: whisper-echo-gtk
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, whisper-echo (>= 0.1.0), libgtk-4-1, libadwaita-1-0
+Description: GTK4 GUI frontend for whisper-echo
+ whisper-echo-gtk provides a native GNOME desktop interface to configure
+ whisper-echo settings, start/stop the dictation engine, monitor live
+ status and transcription, and persist preferences to ~/.whisper-echo/.

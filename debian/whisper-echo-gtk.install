@@ -1,0 +1,6 @@
+usr/bin/whisper-echo-gtk usr/bin/
+share/whisper-echo-gtk/* share/whisper-echo-gtk/
+share/applications/whisper-echo-gtk.desktop share/applications/
+share/icons/hicolor/scalable/apps/whisper-echo-gtk.svg share/icons/hicolor/scalable/apps/
+share/man/man1/whisper-echo-gtk.1.gz share/man/man1/
+share/doc/whisper-echo-gtk/* share/doc/whisper-echo-gtk/

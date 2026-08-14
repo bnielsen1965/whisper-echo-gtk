@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Whisper Echo GTK
+Comment=GTK4 GUI frontend for whisper-echo
+Exec=whisper-echo-gtk
+Icon=whisper-echo-gtk
+Categories=AudioVideo;Audio;Utility;
+StartupNotify=true
