@@ -93,7 +93,7 @@ target_compile_options(whisper-echo-gtk PRIVATE
 install(TARGETS whisper-echo-gtk DESTINATION bin)
 install(DIRECTORY data/ DESTINATION share/whisper-echo-gtk)
 install(FILES data/whisper-echo-gtk.desktop DESTINATION share/applications)
-install(FILES data/icon.svg DESTINATION share/icons/hicolor/scalable/apps/whisper-echo-gtk.svg)
+install(FILES data/icon.svg DESTINATION share/icons/hicolor/scalable/apps RENAME whisper-echo-gtk.svg)
 install(FILES docs/man/whisper-echo-gtk.1.gz DESTINATION share/man/man1)
 install(DIRECTORY docs/ DESTINATION share/doc/whisper-echo-gtk)
 

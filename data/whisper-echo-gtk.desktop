@@ -6,3 +6,4 @@ Exec=whisper-echo-gtk
 Icon=whisper-echo-gtk
 Categories=AudioVideo;Audio;Utility;
 StartupNotify=true
+StartupWMClass=com.github.whisper-echo.gui

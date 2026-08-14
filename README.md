@@ -47,6 +47,37 @@ sudo cmake --install .
 
 The build copies `data/style.css` to the build tree and installs the binary to `bin/` and data to `share/whisper-echo-gtk/`.
 
+## Packaging
+
+The project uses CMake CPack to build both RPM and DEB packages, mirroring the whisper-echo packaging layout.
+
+Build packages:
+```bash
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+cpack -G DEB   # produces whisper-echo-gtk-*.deb
+cpack -G RPM   # produces whisper-echo-gtk-*.rpm
+```
+
+Version is derived from git tags via `git describe`. If no tag is present, `0.1.0-dev` is used.
+
+Debian source packaging is also supported:
+```bash
+sudo apt install debhelper cmake build-essential libgtk-4-dev libadwaita-1-dev
+dpkg-buildpackage -us -uc
+```
+
+Installed files:
+* `bin/whisper-echo-gtk`
+* `share/whisper-echo-gtk/` data
+* `share/applications/whisper-echo-gtk.desktop`
+* `share/icons/hicolor/scalable/apps/whisper-echo-gtk.svg`
+* `share/man/man1/whisper-echo-gtk.1.gz`
+* `share/doc/whisper-echo-gtk/`
+
+Runtime dependencies: `whisper-echo >= 0.1.0`, `libgtk-4-1`, `libadwaita-1-0`.
+
 Dependencies via pkg-config:
 * `gtk4>=4.0`
 * `glib-2.0 gobject-2.0 gio-2.0`
@@ -165,4 +196,4 @@ The window is a regular GTK application window. No always-on-top mode is provide
 
 ## License
 
-See upstream whisper-echo project.
+MIT License. See `LICENSE` file in this repository.

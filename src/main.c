@@ -61,6 +61,7 @@ int main(int argc, char **argv) {
     int status;
 
     adw_init();
+    gtk_window_set_default_icon_name("whisper-echo-gtk");
     app = adw_application_new("com.github.whisper-echo.gui", G_APPLICATION_DEFAULT_FLAGS);
 
     g_signal_connect(app, "activate", G_CALLBACK(on_activate), NULL);
