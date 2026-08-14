@@ -1,5 +1,5 @@
 Name:           whisper-echo-gtk
-Version:        0.1.0
+Version:        0.2.0
 Release:        1%{?dist}
 Summary:        GTK4 GUI frontend for whisper-echo
 License:        MIT
@@ -35,5 +35,10 @@ cmake --install build --prefix %{buildroot}%{_prefix}
 %{_datadir}/doc/whisper-echo-gtk/
 
 %changelog
+* Fri Aug 14 2026 Bryan Nielsen <bnielsen1965@gmail.com> - 0.2.0-1
+- Disable Settings and Help buttons while process is running
+- Auto-focus transcription view after dialogs close
+- Update documentation
+
 * Thu Aug 13 2026 Bryan Nielsen <bnielsen1965@gmail.com> - 0.1.0-1
 - Initial RPM spec

@@ -89,6 +89,7 @@ struct _WhisperEchoWindow {
     GtkButton *start_btn;
     GtkButton *stop_btn;
     GtkButton *settings_btn;
+    GtkButton *help_btn;
     GtkTextView *transcription_view;
 
     /* Settings dialog */

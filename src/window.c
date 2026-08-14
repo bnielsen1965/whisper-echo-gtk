@@ -11,6 +11,7 @@ static void on_models_path_browse(GtkButton *btn, void *user_data);
 static void on_model_path_browse(GtkButton *btn, void *user_data);
 static void on_vad_model_browse(GtkButton *btn, void *user_data);
 static void on_commands_browse(GtkButton *btn, void *user_data);
+static void update_settings_help_sensitivity(WhisperEchoWindow *win);
 
 /* Whisper language codes from whisper.cpp */
 static const char *whisper_lang_codes[] = {
@@ -569,6 +570,12 @@ static void on_help_clicked(GtkButton *btn, void *user_data) {
         "• <b>Help</b> – help icon button opens this help dialog.");
     gtk_box_append(GTK_BOX(vbox), right_desc);
 
+    GtkWidget *disabled_note = gtk_label_new(NULL);
+    gtk_label_set_wrap(GTK_LABEL(disabled_note), TRUE);
+    gtk_label_set_xalign(GTK_LABEL(disabled_note), 0.0);
+    gtk_label_set_markup(GTK_LABEL(disabled_note), "<i>Note: Settings and Help buttons are disabled while whisper-echo is running to prevent dictation keystrokes from affecting dialogs.</i>");
+    gtk_box_append(GTK_BOX(vbox), disabled_note);
+
     GtkWidget *view_note = gtk_label_new(NULL);
     gtk_label_set_wrap(GTK_LABEL(view_note), TRUE);
     gtk_label_set_xalign(GTK_LABEL(view_note), 0.0);
@@ -908,11 +915,18 @@ static void on_process_exited(int exit_code, void *user_data) {
     /* Re-enable start button, disable others */
     gtk_widget_set_sensitive(GTK_WIDGET(win->start_btn), TRUE);
     gtk_widget_set_sensitive(GTK_WIDGET(win->stop_btn), FALSE);
+    update_settings_help_sensitivity(win);
 }
 
 static void on_process_error(const char *error, void *user_data) {
     (void)user_data;
     fprintf(stderr, "[whisper-echo] %s\n", error);
+}
+
+static void update_settings_help_sensitivity(WhisperEchoWindow *win) {
+    bool running = win->process && whisper_process_is_running(win->process);
+    gtk_widget_set_sensitive(GTK_WIDGET(win->settings_btn), !running);
+    gtk_widget_set_sensitive(GTK_WIDGET(win->help_btn), !running);
 }
 
 static void on_start_clicked(GtkButton *btn, void *user_data) {
@@ -994,6 +1008,7 @@ static void on_start_clicked(GtkButton *btn, void *user_data) {
     /* Update button states */
     gtk_widget_set_sensitive(GTK_WIDGET(win->start_btn), FALSE);
     gtk_widget_set_sensitive(GTK_WIDGET(win->stop_btn), TRUE);
+    update_settings_help_sensitivity(win);
 
     /* Clear transcription view */
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(win->transcription_view);
@@ -1016,6 +1031,9 @@ static void on_settings_dialog_response(GtkDialog *dialog, gint response_id, Whi
     sync_config_from_widgets(win);
     config_save(&win->config);
     gtk_widget_hide(GTK_WIDGET(dialog));
+    if (win->transcription_view) {
+        gtk_widget_grab_focus(GTK_WIDGET(win->transcription_view));
+    }
 }
 
 static void on_settings_clicked(GtkButton *btn, void *user_data) {
@@ -1310,10 +1328,10 @@ static GtkWidget *build_runtime_pane(WhisperEchoWindow *win) {
     gtk_box_append(GTK_BOX(btn_box), GTK_WIDGET(win->settings_btn));
 
     /* Help button */
-    GtkWidget *help_btn = gtk_button_new_from_icon_name("help-about");
-    gtk_widget_set_size_request(help_btn, 19, 17);
-    gtk_box_append(GTK_BOX(btn_box), help_btn);
-    g_signal_connect(help_btn, "clicked", G_CALLBACK(on_help_clicked), win);
+    win->help_btn = GTK_BUTTON(gtk_button_new_from_icon_name("help-about"));
+    gtk_widget_set_size_request(GTK_WIDGET(win->help_btn), 19, 17);
+    gtk_box_append(GTK_BOX(btn_box), GTK_WIDGET(win->help_btn));
+    g_signal_connect(win->help_btn, "clicked", G_CALLBACK(on_help_clicked), win);
 
     /* Transcription view */
     GtkWidget *tv = gtk_text_view_new();
@@ -1381,6 +1399,8 @@ static void whisper_echo_window_init(WhisperEchoWindow *win) {
     g_signal_connect(win->start_btn, "clicked", G_CALLBACK(on_start_clicked), win);
     g_signal_connect(win->stop_btn, "clicked", G_CALLBACK(on_stop_clicked), win);
     g_signal_connect(win->settings_btn, "clicked", G_CALLBACK(on_settings_clicked), win);
+
+    update_settings_help_sensitivity(win);
 
     /* Save config on window close */
     g_signal_connect(win, "close-request", G_CALLBACK(on_window_close_request), NULL);

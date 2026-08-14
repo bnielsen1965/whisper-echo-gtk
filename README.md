@@ -15,6 +15,7 @@ whisper-echo-gtk provides a native GNOME desktop interface to configure whisper-
 * File pickers for models directory, model, VAD model and commands file
 * Automatic audio device enumeration via `whisper-echo --list-devices`
 * CSS-styled UI with status colors
+* Settings and Help buttons are disabled while whisper-echo is running to prevent dictation keystrokes from affecting dialogs
 
 ## Requirements
 
@@ -165,8 +166,8 @@ A warning is shown in the Settings dialog that changes apply on next Start.
 
 * **Start**: Saves config from the Settings dialog, builds argument vector via `config_to_args`, spawns whisper-echo with stdout/stderr pipes, displays status and transcription. Start is disabled while running.
 * **Stop**: Sends SIGTERM to the child process and returns to IDLE. Stop is enabled while running.
-* **Settings**: Opens modal Settings dialog. Changes are saved to `~/.whisper-echo/whisper-echo.conf` when Close is pressed and applied on next Start.
-* **Help**: Shows an overview of whisper-echo and UI usage.
+* **Settings**: Opens modal Settings dialog. Changes are saved to `~/.whisper-echo/whisper-echo.conf` when Close is pressed and applied on next Start. Disabled while whisper-echo is running to prevent dictation keystrokes from reaching the dialog.
+* **Help**: Shows an overview of whisper-echo and UI usage. Disabled while whisper-echo is running to prevent dictation keystrokes from reaching the dialog.
 
 Status lines from whisper-echo are parsed from `[status]` or `[status (flags)]`. Flags `p` = print paused, `Si` = uinput paused.
 
