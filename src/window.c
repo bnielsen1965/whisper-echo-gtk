@@ -886,7 +886,16 @@ static void trim_transcription_buffer(WhisperEchoWindow *win) {
 static void on_transcription_line(const char *line, void *user_data) {
     WhisperEchoWindow *win = (WhisperEchoWindow *)user_data;
     GtkTextBuffer *buffer = gtk_text_view_get_buffer(win->transcription_view);
-    GtkTextIter end;
+    GtkTextIter end, cursor;
+
+    /* If the user has clicked away from the end, do not scroll.
+     * The buffer ends with a trailing newline, so the end iter sits on an
+     * empty final line. Treat the cursor as "at the end" when it is on that
+     * final line or on the last line of content (i.e. within one line of the
+     * end); only stop following once the user has moved to an earlier line. */
+    gtk_text_buffer_get_iter_at_mark(buffer, &cursor, gtk_text_buffer_get_insert(buffer));
+    gtk_text_buffer_get_end_iter(buffer, &end);
+    gboolean follow = (gtk_text_iter_get_line(&end) - gtk_text_iter_get_line(&cursor)) <= 1;
 
     gtk_text_buffer_get_end_iter(buffer, &end);
     gtk_text_buffer_insert(buffer, &end, line, -1);
@@ -894,9 +903,12 @@ static void on_transcription_line(const char *line, void *user_data) {
 
     trim_transcription_buffer(win);
 
-    /* Auto-scroll to bottom */
-    gtk_text_view_scroll_to_mark(GTK_TEXT_VIEW(win->transcription_view),
-                                  gtk_text_buffer_get_insert(buffer), 0.0, FALSE, 0.0, 1.0);
+    if (follow) {
+        gtk_text_buffer_get_end_iter(buffer, &end);
+        gtk_text_buffer_place_cursor(buffer, &end);
+        gtk_text_view_scroll_to_mark(GTK_TEXT_VIEW(win->transcription_view),
+                                      gtk_text_buffer_get_insert(buffer), 0.0, FALSE, 0.0, 1.0);
+    }
 }
 
 static void on_process_exited(int exit_code, void *user_data) {
