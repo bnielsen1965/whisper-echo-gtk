@@ -2,6 +2,19 @@
 
 All notable changes to whisper-echo-gtk will be documented in this file.
 
+## [0.3.0] - 2026-08-21
+
+### Added
+* Model info row in the runtime pane showing the active transcription model and VAD model filenames
+* Model info row dims when the VAD model is disabled or unset
+* Rounded background shape to the application icon
+
+### Changed
+* Transcription view now follows the tail only while the cursor is at the end, so scrolling up through earlier text is no longer overridden
+
+### Fixed
+* N/A
+
 ## [0.2.0] - 2026-08-14
 
 ### Added

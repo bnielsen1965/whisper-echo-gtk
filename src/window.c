@@ -1081,6 +1081,31 @@ static void on_settings_clicked(GtkButton *btn, void *user_data) {
  * Config sync from widgets
  * ============================================================================ */
 
+static void update_model_info_labels(WhisperEchoWindow *win) {
+    gchar *text = NULL;
+    if (win->config.model_path[0]) {
+        text = g_strconcat("M: ", g_path_get_basename(win->config.model_path), NULL);
+    }
+    gtk_label_set_text(win->model_info_label, text ? text : "");
+    g_free(text);
+
+    /* Mirror config_to_args: a VAD model is in use unless disabled or unset */
+    if (win->config.vad_model[0]) {
+        text = g_strconcat("VAD: ", g_path_get_basename(win->config.vad_model), NULL);
+    } else {
+        text = g_strdup("VAD:");
+    }
+    gtk_label_set_text(win->vad_info_label, text);
+    g_free(text);
+
+    gboolean vad_active = !win->config.no_silero_vad && win->config.vad_model[0] != '\0';
+    if (vad_active) {
+        gtk_widget_remove_css_class(GTK_WIDGET(win->vad_info_label), "model-info-inactive");
+    } else {
+        gtk_widget_add_css_class(GTK_WIDGET(win->vad_info_label), "model-info-inactive");
+    }
+}
+
 static void sync_config_from_widgets(WhisperEchoWindow *win) {
     g_strlcpy(win->config.models_path, entry_get_text(win->models_path_entry),
               sizeof(win->config.models_path));
@@ -1124,6 +1149,8 @@ static void sync_config_from_widgets(WhisperEchoWindow *win) {
     g_strlcpy(win->config.binary_path, entry_get_text(win->binary_path_entry),
               sizeof(win->config.binary_path));
     win->config.max_transcription_lines = (int)gtk_spin_button_get_value(win->max_lines_spin);
+
+    update_model_info_labels(win);
 }
 
 /* ============================================================================
@@ -1373,7 +1400,32 @@ static GtkWidget *build_runtime_pane(WhisperEchoWindow *win) {
     gtk_widget_set_hexpand(GTK_WIDGET(btn_box), TRUE);
 
     gtk_box_append(GTK_BOX(box), top_row);
+
+    /* Model info row: model filename left, VAD model filename right */
+    GtkWidget *info_row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_widget_set_hexpand(info_row, TRUE);
+
+    win->model_info_label = GTK_LABEL(gtk_label_new(""));
+    gtk_label_set_xalign(win->model_info_label, 0.5);
+    gtk_label_set_ellipsize(win->model_info_label, PANGO_ELLIPSIZE_MIDDLE);
+    gtk_widget_set_halign(GTK_WIDGET(win->model_info_label), GTK_ALIGN_CENTER);
+    gtk_widget_set_hexpand(GTK_WIDGET(win->model_info_label), TRUE);
+    gtk_widget_add_css_class(GTK_WIDGET(win->model_info_label), "model-info");
+
+    win->vad_info_label = GTK_LABEL(gtk_label_new(""));
+    gtk_label_set_xalign(win->vad_info_label, 0.5);
+    gtk_label_set_ellipsize(win->vad_info_label, PANGO_ELLIPSIZE_MIDDLE);
+    gtk_widget_set_halign(GTK_WIDGET(win->vad_info_label), GTK_ALIGN_CENTER);
+    gtk_widget_set_hexpand(GTK_WIDGET(win->vad_info_label), TRUE);
+    gtk_widget_add_css_class(GTK_WIDGET(win->vad_info_label), "model-info");
+
+    gtk_box_append(GTK_BOX(info_row), GTK_WIDGET(win->model_info_label));
+    gtk_box_append(GTK_BOX(info_row), GTK_WIDGET(win->vad_info_label));
+    gtk_box_append(GTK_BOX(box), info_row);
+
     gtk_box_append(GTK_BOX(box), scroll);
+
+    update_model_info_labels(win);
 
     return box;
 }

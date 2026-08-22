@@ -13,7 +13,7 @@ if(GIT_FOUND)
     if(GIT_TAG_RESULT EQUAL 0 AND GIT_TAG MATCHES "^v?[0-9]")
         string(REGEX REPLACE "^v" "" PROJECT_VERSION "${GIT_TAG}")
     else()
-        set(PROJECT_VERSION "0.1.0-dev")
+        set(PROJECT_VERSION "0.3.0-dev")
     endif()
 
     execute_process(
@@ -39,7 +39,7 @@ if(GIT_FOUND)
         set(PROJECT_RELEASE "1")
     endif()
 else()
-    set(PROJECT_VERSION "0.1.0-dev")
+    set(PROJECT_VERSION "0.3.0-dev")
     set(PROJECT_RELEASE "1")
 endif()
 

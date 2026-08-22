@@ -23,6 +23,17 @@
     font-size: 1em;
 }
 
+/* Model info row */
+.model-info {
+    color: #3b82f6;
+    font-size: 0.75em;
+}
+
+/* Model info row, inactive (e.g. VAD disabled or no model file) */
+.model-info-inactive {
+    color: #71717a;
+}
+
 /* UInput icon indicator */
 .uinput-icon {
     margin-right: 8px;

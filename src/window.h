@@ -85,6 +85,8 @@ struct _WhisperEchoWindow {
 
     /* Widgets - Runtime */
     GtkLabel *status_label;
+    GtkLabel *model_info_label;
+    GtkLabel *vad_info_label;
     GtkWidget *uinput_indicator;
     GtkButton *start_btn;
     GtkButton *stop_btn;
